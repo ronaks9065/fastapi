@@ -86,6 +86,17 @@ jobs:
         run: |
           git clone https://$GH_TOKEN@github.com/ronaks9065/fastapi-manifests.git
 
+      - name: Update Kubernetes manifests with new image
+        run: |
+          sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" fastapi-manifests/manifests/backend.yaml
+          cd fastapi-manifests
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update image to ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}"
+          git push origin main
+
+
       - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f ./fastapi-manifests/manifests
