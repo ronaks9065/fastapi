@@ -42,7 +42,7 @@ jobs:
           docker push ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}
 
   cd:
-    name: Deploy to EKS Cluster
+    name: CD
     needs: build-and-push
     runs-on: ubuntu-latest
 
@@ -65,7 +65,3 @@ jobs:
       - name: Update kubeconfig
         run: |
           aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
-
-      # - name: Apply Kubernetes manifests
-      #   run: |
-      #     kubectl apply -f ./k8s/
