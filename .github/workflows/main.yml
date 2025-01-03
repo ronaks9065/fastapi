@@ -82,9 +82,10 @@ jobs:
 
       - name: Checkout Kubernetes manifests repository
         run: |
-          git clone https://github.com/${{ github.actor }}:${{ secrets.GH_TOKEN }}@github.com/ronaks9065/fastapi-manifests.git
-          cd fastapi-manifests
-          git checkout master
+          git clone https://github.com/ronaks9065/fastapi-manifests.git
+        env:
+          GIT_ASKPASS: echo
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Apply Kubernetes manifests
         run: |
