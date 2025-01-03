@@ -88,8 +88,8 @@ jobs:
 
       - name: Update Kubernetes manifests with new image
         run: |
-          cd fastapi-manifests
           sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" ./manifests/backend.yaml
+          cd fastapi-manifests
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
