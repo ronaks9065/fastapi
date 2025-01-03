@@ -80,10 +80,11 @@ jobs:
         run: |
           aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
 
-      - uses: actions/checkout@v1  
-        with:
-          repository: ronaks9065/fastapi-manifests
-          token: ${{ secrets.GH_TOKEN }}
+      - name: Clone private repository
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git clone https://github.com/ronaks9065/fastapi-manifests.git
 
       - name: Apply Kubernetes manifests
         run: |
