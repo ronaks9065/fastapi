@@ -84,7 +84,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git clone https://github.com/ronaks9065/fastapi-manifests.git
+          git clone https://$GH_TOKEN@github.com/ronaks9065/fastapi-manifests.git
 
       - name: Apply Kubernetes manifests
         run: |
