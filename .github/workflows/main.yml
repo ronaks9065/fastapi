@@ -96,7 +96,6 @@ jobs:
           git commit -m "Update image to ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}"
           git push origin master
 
-
       - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f ./fastapi-manifests/manifests
