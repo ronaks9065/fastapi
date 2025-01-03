@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      imagePullSecrets:
+      - name: fastapi-ronak
+      containers:
+        - name: backend
+          image: 850995574008.dkr.ecr.eu-central-1.amazonaws.com/fastapi:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DOMAIN
+              value: "localhost"
+            - name: FRONTEND_HOST
+              value: "http://fastapi.hardikpatel.work"
+            - name: ENVIRONMENT
+              value: "production"
+            - name: BACKEND_CORS_ORIGINS
+              value: "http://fastapi.hardikpatel.work,http://http://fastapi.hardikpatel.work,https://fastapi.hardikpatel.work,https://fastapi.hardikpatel.work,http://fastapi.hardikpatel.work.tiangolo.com"
+            - name: SECRET_KEY
+              value: "your_secret_key_here"
+            - name: FIRST_SUPERUSER
+              value: "admin@example.com"
+            - name: FIRST_SUPERUSER_PASSWORD
+              value: "your_superuser_password"
+            - name: SMTP_HOST
+              value: "smtp.example.com"
+            - name: SMTP_USER
+              value: "your_smtp_user"
+            - name: SMTP_PASSWORD
+              value: "your_smtp_password"
+            - name: EMAILS_FROM_EMAIL
+              value: "noreply@example.com"
+            - name: POSTGRES_SERVER
+              value: "database-1.ch2cyk2cuuh4.eu-west-1.rds.amazonaws.com"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: "app"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: SENTRY_DSN
+              value: ""
+            - name: PROJECT_NAME
+              value: "My FastAPI Project"
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
