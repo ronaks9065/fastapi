@@ -80,7 +80,15 @@ jobs:
         run: |
           aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
 
+      - name: Checkout Kubernetes manifests repository
+        run: |
+          git clone https://github.com/ronaks9065/fastapi-manifests.git
+          cd fastapi-manifests
+          git checkout master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
       - name: Apply Kubernetes manifests
         run: |
-          kubectl apply -f ./manifests
+          kubectl apply -f ./fastapi-manifests/manifests
           kubectl get all -A
