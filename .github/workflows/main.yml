@@ -94,7 +94,7 @@ jobs:
           git config user.email "actions@github.com"
           git add .
           git commit -m "Update image to ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}"
-          git push origin main
+          git push origin master
 
 
       - name: Apply Kubernetes manifests
