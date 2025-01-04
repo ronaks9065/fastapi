@@ -78,8 +78,8 @@ jobs:
       
       - name: Update Kubernetes manifests with new image
         run: |
-          # sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:ronakghh|" fastapi-manifests/manifests/backend.yaml
-          sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" fastapi-manifests/manifests/backend.yaml
+          sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:ronakghh|" fastapi-manifests/manifests/backend.yaml
+          # sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" fastapi-manifests/manifests/backend.yaml
       
       - name: Commit and push updated manifests
         run: |
