@@ -71,19 +71,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git clone https://$GH_TOKEN@github.com/ronaks9065/fastapi-manifests.git
-
-      - name: Log backend.yaml content before update
-        run: cat ./fastapi-manifests/manifests/backend.yaml
       
       - name: Update Kubernetes manifests with new image
         run: |
           echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          sed -i'' -e "/^\s*image:/s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" \
-          -e "/^\s*image:/!b; t; a\          image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}" \
-          ./fastapi-manifests/manifests/backend.yaml
-      
-      - name: Log backend.yaml content after update
-        run: cat ./fastapi-manifests/manifests/backend.yaml
+          sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" fastapi-manifests/manifests/deployment.yaml
       
       - name: Commit and push updated manifests
         run: |
