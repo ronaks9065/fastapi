@@ -94,7 +94,7 @@ jobs:
         run: |
           cd fastapi-manifests
           kubectl apply -f manifests/ 
-          kubectl rollout status deployment/backend -n <namespace> --timeout=60s
+          kubectl rollout status deployment/backend --timeout=60
 
       - name: Rollback if deployment fails
         if: failure()
@@ -108,13 +108,13 @@ jobs:
           git commit -m "Rollback to image ${{ secrets.ECR_REPO_URI }}:${PREVIOUS_TAG}"
           git push origin master
           kubectl apply -f manifests/
-          kubectl rollout status deployment/backend -n <namespace> --timeout=60s
+          kubectl rollout status deployment/backend --timeout=60s
 
       - name: Save the new version if successful
         if: success()
         run: |
-          echo ${{ env.COMMIT_SHA }} > fastapi-manifests/manifests/last_successful_version.txt
+          echo ${{ env.COMMIT_SHA }} > fastapi-manifests/last_successful_version.txt
           cd fastapi-manifests
-          git add manifests/last_successful_version.txt
+          git add last_successful_version.txt
           git commit -m "Update last successful version to ${{ env.COMMIT_SHA }}"
           git push origin master
