@@ -2,7 +2,7 @@
 FROM nginx:alpine
 
 # Add a success message (optional)
-RUN echo "Pipeline Success Test - Build Successful!" > /usr/share/nginx/html/index.html
+RUN echo "Pipeline Success Test - Build Successful! RONAK" > /usr/share/nginx/html/index.html
 
 # Expose the default HTTP port
 EXPOSE 5000
