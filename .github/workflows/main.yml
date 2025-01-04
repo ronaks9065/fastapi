@@ -33,9 +33,6 @@ jobs:
         id: vars
         run: echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Set output for COMMIT_SHA
-        run: echo "::set-output name=COMMIT_SHA::$(git rev-parse --short HEAD)"
-
       - name: Build Docker image with unique tag
         run: |
           docker build -t ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }} backend/
@@ -95,5 +92,5 @@ jobs:
       - name: Apply Kubernetes manifests
         run: |
           cd fastapi-manifests
-          kubectl apply -f manifests/ --validate=false
+          kubectl apply -f manifests/ 
           kubectl get all -A
