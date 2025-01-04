@@ -75,19 +75,16 @@ jobs:
         run: |
           git clone https://$GH_TOKEN@github.com/ronaks9065/fastapi-manifests.git
 
-      - name: Print variables
-        run: |
-          echo "COMMIT_SHA=${{ needs.build-and-push.outputs.COMMIT_SHA }}"
-          echo "ECR_REPO_URI=${{ secrets.ECR_REPO_URI }}"
+      - name: Extract Git commit SHA
+        id: vars
+        run: echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       
       - name: Update Kubernetes manifests with new image
         run: |
           echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo $COMMIT_SHA
           # sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:ronak|" fastapi-manifests/manifests/backend.yaml
-          # sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" fastapi-manifests/manifests/backend.yaml
-          sed -i "/- name: backend/{n;s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ needs.build-and-push.outputs.COMMIT_SHA }}|}" fastapi-manifests/manifests/backend.yaml
-          # sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ needs.build-and-push.outputs.COMMIT_SHA }}|" fastapi-manifests/manifests/backend.yaml
+          sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" fastapi-manifests/manifests/backend.yaml
       
       - name: Commit and push updated manifests
         run: |
