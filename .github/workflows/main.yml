@@ -78,7 +78,9 @@ jobs:
       - name: Update Kubernetes manifests with new image
         run: |
           echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          sed -i'' -e "/^\s*image:/s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" ./fastapi-manifests/manifests/backend.yaml
+          sed -i'' -e "/^\s*image:/s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" \
+          -e "/^\s*image:/!b; t; a\          image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}" \
+          ./fastapi-manifests/manifests/backend.yaml
       
       - name: Log backend.yaml content after update
         run: cat ./fastapi-manifests/manifests/backend.yaml
