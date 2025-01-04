@@ -76,7 +76,8 @@ jobs:
         run: |
           echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           echo $COMMIT_SHA
-          sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" fastapi-manifests/manifests/backend.yaml
+          sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:ronak|" fastapi-manifests/manifests/backend.yaml
+          # sed -i "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" fastapi-manifests/manifests/backend.yaml
       
       - name: Commit and push updated manifests
         run: |
