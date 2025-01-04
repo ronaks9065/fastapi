@@ -94,7 +94,7 @@ jobs:
         run: |
           cd fastapi-manifests
           kubectl apply -f manifests/ 
-          kubectl rollout status deployment/backend --timeout=60
+          kubectl rollout status deployment/backend --timeout=60s
 
       - name: Rollback if deployment fails
         if: failure()
