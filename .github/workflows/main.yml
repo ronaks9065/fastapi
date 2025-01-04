@@ -25,13 +25,6 @@ jobs:
           role-session-name: github-actions-federation
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v3
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ secrets.AWS_REGION }}
-
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -64,13 +57,6 @@ jobs:
           role-session-name: github-actions-federation
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v3
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ secrets.AWS_REGION }}
-
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
         with:
@@ -91,7 +77,8 @@ jobs:
       
       - name: Update Kubernetes manifests with new image
         run: |
-          sed -i'' -e "s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" ./fastapi-manifests/manifests/backend.yaml
+          echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          sed -i'' -e "/^\s*image:/s|image:.*|image: ${{ secrets.ECR_REPO_URI }}:${{ env.COMMIT_SHA }}|" ./fastapi-manifests/manifests/backend.yaml
       
       - name: Log backend.yaml content after update
         run: cat ./fastapi-manifests/manifests/backend.yaml
