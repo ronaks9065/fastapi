@@ -94,5 +94,6 @@ jobs:
 
       - name: Apply Kubernetes manifests
         run: |
-          kubectl apply -f fastapi-manifests/manifests
+          cd fastapi-manifests
+          kubectl apply -f manifests/
           kubectl get all -A
