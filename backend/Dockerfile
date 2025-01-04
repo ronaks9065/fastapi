@@ -5,6 +5,6 @@ FROM nginx:alpine
 RUN echo "Pipeline Success Test - Build Successful!" > /usr/share/nginx/html/index.html
 
 # Expose the default HTTP port
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
